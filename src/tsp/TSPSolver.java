@@ -28,6 +28,7 @@ public class TSPSolver {
 	 * The Solution that will be returned by the program.
 	 */
 	private Solution m_solution;
+	
 
 	/** The Instance of the problem. */
 	private Instance m_instance;
@@ -72,6 +73,14 @@ public class TSPSolver {
 	public void solve() throws Exception
 	{
 		m_solution.print(System.err);
+		     	 	  		  		    		 	
+			// Exemple simpliste où le sommet  i est inséré     	 	  		  		    		 	
+			// en position i dans la tournée.     	 	  		  		    		 	
+			for (int i=1; i <= m_instance.getNbCities(); i++)   { 	 	  		  		    		 	
+				m_solution.setCityPosition(i, i);    
+				}  	 	  		  		    		 	
+			 	 	  		  		    		 		 	  		  		    		 	
+
 		
 		// Example of a time loop
 		long startTime = System.currentTimeMillis();
