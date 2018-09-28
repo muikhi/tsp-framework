@@ -18,6 +18,7 @@ package tsp;
  */
 // morgane
 //sese
+//claire
 public class TSPSolver {
 
 	// -----------------------------
