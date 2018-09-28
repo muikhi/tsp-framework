@@ -75,12 +75,6 @@ public class TSPSolver {
 	{
 		m_solution.print(System.err);
 		     	 	  		  		    		 	
-			// Exemple simpliste où le sommet  i est inséré     	 	  		  		    		 	
-			// en position i dans la tournée.     	 	  		  		    		 	
-			for (int i=1; i <= m_instance.getNbCities(); i++)   { 	 	  		  		    		 	
-				m_solution.setCityPosition(i, i);    
-				}  	 	  		  
-			
 			 	 	  		  		    		 		 	  		  		    		 	
 
 		
@@ -89,6 +83,12 @@ public class TSPSolver {
 		long spentTime = 0;
 		do
 		{
+			// Exemple simpliste où le sommet  i est inséré     	 	  		  		    		 	
+			// en position i dans la tournée. 
+			for (int i=1; i <= m_instance.getNbCities(); i++)   { 	 	  		  		    		 	
+				m_solution.setCityPosition(i, i);     	 	  		  		    		 	
+				} 	 	  		  		    		 	
+
 			// TODO
 			// Code a loop base on time here
 			spentTime = System.currentTimeMillis() - startTime;
