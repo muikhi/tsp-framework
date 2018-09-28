@@ -79,7 +79,8 @@ public class TSPSolver {
 			// en position i dans la tournée.     	 	  		  		    		 	
 			for (int i=1; i <= m_instance.getNbCities(); i++)   { 	 	  		  		    		 	
 				m_solution.setCityPosition(i, i);    
-				}  	 	  		  		    		 	
+				}  	 	  		  
+			
 			 	 	  		  		    		 		 	  		  		    		 	
 
 		
