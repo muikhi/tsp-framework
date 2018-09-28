@@ -16,6 +16,7 @@ package tsp;
  * @version 2017
  * 
  */
+// morgane
 public class TSPSolver {
 
 	// -----------------------------
