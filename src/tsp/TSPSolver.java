@@ -84,7 +84,7 @@ public class TSPSolver {
 		do
 		{
 			// Exemple simpliste où le sommet  i est inséré     	 	  		  		    		 	
-			// en position i dans la tournée. 
+			// en position i dans la tournée. + swaps 
 			for (int i=1; i <= m_instance.getNbCities(); i++)   { 	 	  		  		    		 	
 				m_solution.setCityPosition(i, i);     	 	  		  		    		 	
 				} 	 	  		  		    		 	
