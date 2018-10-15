@@ -84,11 +84,23 @@ public class TSPSolver {
 		do
 		{
 			// Exemple simpliste où le sommet  i est inséré     	 	  		  		    		 	
-			// en position i dans la tournée. + swaps 
+			// en position i dans la tournée. + swaps aleatoires
 			for (int i=1; i <= m_instance.getNbCities(); i++)   { 	 	  		  		    		 	
 				m_solution.setCityPosition(i, i);     	 	  		  		    		 	
 				} 	 	  		  		    		 	
-
+			double distance_init = m_solution.evaluate() ; 
+			
+			int pos_a_echanger1 = (int)Math.random()*m_instance.getNbCities() ;
+			int pos_a_echanger2 = (int)Math.random()*m_instance.getNbCities() ;
+			int index_city1 = m_solution.getCity(pos_a_echanger1);
+			int index_city2 = m_solution.getCity(pos_a_echanger2);
+			m_solution.setCityPosition(index_city1, pos_a_echanger2); 
+			m_solution.setCityPosition(index_city2, pos_a_echanger1);
+			if (m_solution.evaluate() > distance_init) {
+				m_solution.setCityPosition(index_city1, pos_a_echanger1); 
+				m_solution.setCityPosition(index_city2, pos_a_echanger2);
+			}
+			
 			// TODO
 			// Code a loop base on time here
 			spentTime = System.currentTimeMillis() - startTime;
