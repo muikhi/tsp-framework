@@ -106,7 +106,10 @@ public class TSPSolver {
 			}
 			else {
 				distance_optim=m_solution.evaluate();
+				int index_ville_depart = m_solution.getCity(0);
+				m_solution.setCityPosition(index_ville_depart, m_instance.getNbCities());
 			}
+			
 			
 			// TODO
 			// Code a loop base on time here
