@@ -98,6 +98,7 @@ public class TSPSolver {
 			m_solution.setCityPosition(index_city1, pos_a_echanger2); 
 			m_solution.setCityPosition(index_city2, pos_a_echanger1);
 			
+			
 			if (m_solution.evaluate() > distance_optim) {
 				m_solution.setCityPosition(index_city1, pos_a_echanger1); 
 				m_solution.setCityPosition(index_city2, pos_a_echanger2);
