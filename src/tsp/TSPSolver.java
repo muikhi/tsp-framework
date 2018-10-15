@@ -82,7 +82,7 @@ public class TSPSolver {
 		long startTime = System.currentTimeMillis();
 		long spentTime = 0;
 		// Exemple simpliste où le sommet  i est inséré     	 	  		  		    		 	
-					// en position i dans la tournée. + swaps aleatoires
+		// en position i dans la tournée. + swaps aleatoires
 		
 		for (int i=0; i < m_instance.getNbCities(); i++)   { 	 	  		  		    		 	
 			m_solution.setCityPosition(i, i);     	 	  		  		    		 	
