@@ -91,10 +91,15 @@ public class TSPSolver {
 		double distance_optim = m_solution.evaluate() ;
 		do
 		{
-			int pos_a_echanger1 = (int)Math.random()*m_instance.getNbCities() ;
-			int pos_a_echanger2 = (int)Math.random()*m_instance.getNbCities() ;
+			int pos_a_echanger1 = (int)(Math.random()*m_instance.getNbCities()) ;
+			int pos_a_echanger2 = (int)(Math.random()*m_instance.getNbCities() );
 			int index_city1 = m_solution.getCity(pos_a_echanger1);
 			int index_city2 = m_solution.getCity(pos_a_echanger2);
+			System.out.println("pos_a_echanger1 " + pos_a_echanger1);
+			System.out.println("pos_a_echanger2 " + pos_a_echanger2);
+			System.out.println("index_city1 " + index_city1);
+			System.out.println("index_city2 " + index_city2);
+
 			m_solution.setCityPosition(index_city1, pos_a_echanger2); 
 			m_solution.setCityPosition(index_city2, pos_a_echanger1);
 			
