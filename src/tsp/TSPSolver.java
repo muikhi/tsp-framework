@@ -81,8 +81,8 @@ public class TSPSolver {
 		// Example of a time loop
 		long startTime = System.currentTimeMillis();
 		long spentTime = 0;
-		// Exemple simpliste où le sommet  i est inséré     	 	  		  		    		 	
-		// en position i dans la tournée. + swaps aleatoires
+		// Le sommet  i est inséré     	 	  		  		    		 	
+		// en position i dans la tournée
 		
 		for (int i=0; i < m_instance.getNbCities(); i++)   { 	 	  		  		    		 	
 			m_solution.setCityPosition(i, i);     	 	  		  		    		 	
@@ -91,7 +91,10 @@ public class TSPSolver {
 		double distance_optim = m_solution.evaluate() ;
 		do
 		{
-			int pos_a_echanger1 = (int)(Math.random()*m_instance.getNbCities()) ;
+			
+			// TEST 1 AVEC SWAPS ALEATOIRES
+			
+			/* int pos_a_echanger1 = (int)(Math.random()*m_instance.getNbCities()) ;
 			int pos_a_echanger2 = (int)(Math.random()*m_instance.getNbCities() );
 			int index_city1 = m_solution.getCity(pos_a_echanger1);
 			int index_city2 = m_solution.getCity(pos_a_echanger2);
@@ -115,6 +118,7 @@ public class TSPSolver {
 				m_solution.setCityPosition(index_ville_depart, m_instance.getNbCities());
 			}
 			
+			*/
 			
 			// TODO
 			// Code a loop base on time here
