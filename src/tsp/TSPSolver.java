@@ -73,63 +73,15 @@ public class TSPSolver {
 	 */
 	public void solve() throws Exception
 	{
-		m_solution.print(System.err);
-		     	 	  		  		    		 	
-			 	 	  		  		    		 		 	  		  		    		 	
-
-		
-		// Example of a time loop
-		long startTime = System.currentTimeMillis();
-		long spentTime = 0;
-		// Le sommet  i est inséré     	 	  		  		    		 	
-		// en position i dans la tournée
-		
-		for (int i=0; i < m_instance.getNbCities(); i++)   { 	 	  		  		    		 	
-			m_solution.setCityPosition(i, i);     	 	  		  		    		 	
-			} 
-		m_solution.setCityPosition(0,m_instance.getNbCities());
-		double distance_optim = m_solution.evaluate() ;
-		do
-		{
-			
-			// TEST 1 AVEC SWAPS ALEATOIRES
-			
-			/* int pos_a_echanger1 = (int)(Math.random()*m_instance.getNbCities()) ;
-			int pos_a_echanger2 = (int)(Math.random()*m_instance.getNbCities() );
-			int index_city1 = m_solution.getCity(pos_a_echanger1);
-			int index_city2 = m_solution.getCity(pos_a_echanger2);
-			System.out.println("pos_a_echanger1 " + pos_a_echanger1);
-			System.out.println("pos_a_echanger2 " + pos_a_echanger2);
-			System.out.println("index_city1 " + index_city1);
-			System.out.println("index_city2 " + index_city2);
-
-			m_solution.setCityPosition(index_city1, pos_a_echanger2); 
-			m_solution.setCityPosition(index_city2, pos_a_echanger1);
-			
-			
-			if (m_solution.evaluate() > distance_optim) {
-				m_solution.setCityPosition(index_city1, pos_a_echanger1); 
-				m_solution.setCityPosition(index_city2, pos_a_echanger2);
-				
-			}
-			else {
-				distance_optim=m_solution.evaluate();
-				int index_ville_depart = m_solution.getCity(0);
-				m_solution.setCityPosition(index_ville_depart, m_instance.getNbCities());
-			}
-			
-			*/
-			
-			// TODO
-			// Code a loop base on time here
-			spentTime = System.currentTimeMillis() - startTime;
-		}while(spentTime < (m_timeLimit * 1000 - 100) );
-		
+	
 	}
 
+	
 	// -----------------------------
 	// ----- GETTERS / SETTERS -----
 	// -----------------------------
+	
+
 
 	/** @return the problem Solution */
 	public Solution getSolution() {
