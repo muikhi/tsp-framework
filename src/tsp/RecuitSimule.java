@@ -1,27 +1,57 @@
 package tsp;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class RecuitSimule extends TSPSolver {
+public class RecuitSimule  {
 
-	private Solution m_solution ;
-	private Instance m_instance ; 
-	private long m_timeLimit ;
+	// -----------------------------
+	// ----- ATTRIBUTS -------------   
+	// -----------------------------
+	
+	/** The Solution that will be returned by the program. */ 
+	private Solution m_solution;
+	
+	/** The Instance of the problem. */
+	private Instance m_instance;
+
+	/** Time given to solve the problem. */
+	private long m_timeLimit;
 
 	
-	
-	public RecuitSimule(Instance instance, long timeLimit) {
-		super(instance, timeLimit);
+	// -----------------------------
+	// ----- CONSTRUCTOR -----------
+	// -----------------------------
+	/**
+	 * Crée un objet de la classe RecuitSimule pour les données du problème en paramètre  (instance)
+	 * @param instance , les donnees du probleme
+	 * @param timeLimit, la limite temporelle en secondes
+	 * @throws Exception
+	 */
+	public RecuitSimule(Instance instance, long timeLimit) throws Exception {
+		m_instance = instance ;
+		m_timeLimit = timeLimit ; 
+		m_solution = new Solution (instance);
 		
-		// TODO Auto-generated constructor stub
+		//solution de base : la ville i est en position i
+		for (int i=0; i < m_instance.getNbCities(); i++)   { 	 	  		  		    		 	
+		m_solution.setCityPosition(i, i);     	 	  		  		    		 	
+		} 
+		m_solution.setCityPosition(0, m_instance.getNbCities());
+		
 	}
 	
+	// -----------------------------
+	// ----- GETTERS  --------------
+	// -----------------------------
 	
-	/** @return l'index de la valeur min du tableau */
+	/**
+	 * Donne l'index du tableau donné pour lequel la valeur est minimale
+	 * @param distances_array
+	 * @return l'index de la valeur minimale du tableau 
+	 */
 	public int getMin(Double[] distances_array) {
 		int ind = 0 ;
 		double min = 300000 ; // une grande constante du probleme pour la distance maximale
@@ -33,9 +63,15 @@ public class RecuitSimule extends TSPSolver {
 		}
 		return ind ;
 	}
-	/** @param m_sol 
-	 * @return la position de la ville  
-	 * @throws Exception */
+	
+	/**
+	 * Donne la position de la ville d'index indexCity donné
+	 * @param indexCity
+	 * @param m_sol
+	 * @return la position de la ville d'index donné
+	 * @throws Exception
+	 */
+	
 	public int getPos(int indexCity, Solution m_sol) throws Exception {
 		int pos = 0 ;
 		while (m_sol.getCity(pos)!= indexCity && pos< m_instance.getNbCities() ) {
@@ -44,37 +80,36 @@ public class RecuitSimule extends TSPSolver {
 		return pos ;
 	}
 	
-	/** modifie la copie de la solution m_solution avec une methode de recuit simule */
 	
-	public void solve() throws Exception {	
+	// -----------------------------
+	// ----- METHOD ---------------
+	// -----------------------------
+	//TEST 2 : CORRECTION DU TEST 1 POUR PLACER CHAQUE VILLE V AU MEILLEUR ENDROIT
 	
-	m_solution.print(System.err);
-		 	
-	    		
+	/**
+	 * Retourne la solution du probleme associe a l'instance par une methode de recuit simule
+	 * en placant progressivement chaque ville a l'endroit qui rend la distance minimale.
+	 * @param m_instance
+	 * @return la solution du probleme avec une methode de recuit simule 
+	 * @throws Exception
+	 */
+	public Solution solveRS(Instance m_instance) throws Exception {	
 	
-	//TEST 3 : CORRECTION DU TEST 2 POUR PLACER CHAQUE VILLE V AU MEILLEUR ENDROIT
+	this.m_solution.print(System.err);
+	
 	long startTime = System.currentTimeMillis();
 	long spentTime = 0;
+	
+	// On va modifier la copie de la solution initiale 
+	Solution m_sol = this.m_solution.copy();
+	
 	do
 	{
-
-	//solution de base : la ville i est en position i
-	for (int i=0; i < m_instance.getNbCities(); i++)   { 	 	  		  		    		 	
-	m_solution.setCityPosition(i, i);     	 	  		  		    		 	
-	} 
-	m_solution.setCityPosition(0, m_instance.getNbCities());
-	double distance_optim = m_solution.evaluate() ;
-	
-	
-	// On va modifier la copie de la solution initiale
-	Solution m_sol = m_solution.copy();
-	
 	//On va modifier la position de la ville v parmi toutes les villes à fixer 
 	List<Integer> villes_a_fixer = new ArrayList<Integer>() ; 
 	for (int v=1; v<= m_instance.getNbCities(); v++) {
 		villes_a_fixer.add(v);
 	}
-	
 		
 	//On va faire une boucle pour tester toutes les positions pour toutes les villes non déjà fixees
 	
@@ -94,7 +129,7 @@ public class RecuitSimule extends TSPSolver {
 		
 		if (pos_init >= j ) {
 			//on insere v en position i et on decale le reste
-			for (int i = j; i<= pos_init ; j++) {
+			for (int i = j; i<= pos_init ; i++) {
 				int val_a_placer = v ;
 				int temp = m_sol.getCity(i);
 				m_sol.setCityPosition(val_a_placer, i);
@@ -110,6 +145,7 @@ public class RecuitSimule extends TSPSolver {
 			for (int i = m_instance.getNbCities()-1; i> pos_init ; i++) {
 				int val_a_placer = v ;
 				int temp = m_sol.getCity(i);
+				m_sol.setCityPosition(val_a_placer, i);
 				val_a_placer = temp ; 
 				i--;	
 			}
@@ -119,47 +155,34 @@ public class RecuitSimule extends TSPSolver {
 	}
 	
 	//On choisit la meilleure solution, cad qu'on fixe la ville a la position ou sa distance est minimale
-	Set<Double> distances = hm.keySet() ; 
+	Set<Double> distances = hm.keySet() ;
+	System.out.println("distances : " + distances);
 	Double[] distances_array = distances.toArray(new Double[hm.size()]);
 	double distance_min = getMin(distances_array) ;
 	m_sol = hm.get(distance_min);
-	System.out.println(m_sol);
+	System.out.println("solution retenue : " + m_sol);
 	 
 	}
 	
-	
-	// TODO
 	// Code a loop base on time here
 	 spentTime = System.currentTimeMillis() - startTime;
 }while(spentTime < (m_timeLimit * 1000 - 100) );
 	
-	
-	 
+	this.m_solution = m_sol ;
+	System.out.println("La solution finale est : " + this.m_solution);
+	return this.m_solution ; 
+	}	
+
+	public static void main (String []args) throws Exception {
+	Instance inst = new Instance("instances/d657.tsp", 0);	
+	RecuitSimule rs = new RecuitSimule (inst, 60) ; 
+	rs.solveRS(inst) ; 
+		
+	}	
+		
 /*	
-	//On echange la position de la ville j avec la ville a sa suite
-	for (int j = 2; j<m_instance.getNbCities(); j++) { 
-	int temp = m_sol.getCity(j);
-	m_sol.setCityPosition(j-1, j);
-	m_sol.setCityPosition(temp, j-1  );
-	double dist_j = m_sol.evaluate();  
-	if (distance_optim >dist_j) {
-		 hm.put(dist_j, m_sol);		// on stocke la solution et sa distance quand elle est minimale
-		 distance_optim = dist_j ;
-		}
-	}
-	System.out.println(hm.toString()); 
-*/	
-	
-	 
-	
-	
-	
-
-
-/*
-	//TEST 2 : ON CHOISIT UNE VILLE QUI SERA PLACEE AU MEILLEUR ENDROIT EN 
-	//PARCOURANT LA TOURNEE 
-	//on choisit ARBITRAIREMENT la ville 1 pour la changer de place	 		  		    		 	
+	//TEST 1 : ON CHOISIT UNE VILLE QUI SERA PLACEE AU MEILLEUR ENDROIT EN PARCOURANT LA TOURNEE 
+	//on choisit de deplacer ARBITRAIREMENT la ville 1	 		  		    		 	
 
 	double[] distances_iter = new double[m_instance.getNbCities()] ; // on cree un tableau qui enregistre le evaluate pour
 	//chaque iteration, on choisira la meilleure distance entre 1 et nb de villes-1 
@@ -203,70 +226,5 @@ public class RecuitSimule extends TSPSolver {
 			m_solution.setCityPosition(0, m_instance.getNbCities());
 		System.out.println("distance optimale : " +m_solution.evaluate());	
 		}
-	
-	/*
-	
-/*	
-	// TEST 1 AVEC SWAPS ALEATOIRES
-	 
-	 
-// Example of a time loop
-long startTime = System.currentTimeMillis();
-long spentTime = 0;
-
-// Le sommet  i est inséré en position i dans la tournée
-
-for (int i=0; i < m_instance.getNbCities(); i++)   { 	 	  		  		    		 	
-	m_solution.setCityPosition(i, i);     	 	  		  		    		 	
-	} 
-m_solution.setCityPosition(0, m_instance.getNbCities());
-double distance_optim = m_solution.evaluate() ; 
-
-	do
-{
-	int pos_a_echanger1 = (int)(Math.random()*m_instance.getNbCities()) ;
-	int pos_a_echanger2 = (int)(Math.random()*m_instance.getNbCities() );
-	int index_city1 = m_solution.getCity(pos_a_echanger1);
-	int index_city2 = m_solution.getCity(pos_a_echanger2);
-	System.out.println("pos_a_echanger1 " + pos_a_echanger1);
-	System.out.println("pos_a_echanger2 " + pos_a_echanger2);
-	System.out.println("index_city1 " + index_city1);
-	System.out.println("index_city2 " + index_city2);
-
-	m_solution.setCityPosition(index_city1, pos_a_echanger2); 
-	m_solution.setCityPosition(index_city2, pos_a_echanger1);
-	
-	
-	if (m_solution.evaluate() > distance_optim) {
-		m_solution.setCityPosition(index_city1, pos_a_echanger1); 
-		m_solution.setCityPosition(index_city2, pos_a_echanger2);
-		
-	}
-	else {
-		distance_optim=m_solution.evaluate();
-		int index_ville_depart = m_solution.getCity(0);
-		m_solution.setCityPosition(index_ville_depart, m_instance.getNbCities());
-	}
-	
-	
-	
-	// TODO
-	// Code a loop base on time here
-	spentTime = System.currentTimeMillis() - startTime;
-}while(spentTime < (m_timeLimit * 1000 - 100) );
-
-*/
-	
-	}	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-}
+*/ 
+}	
