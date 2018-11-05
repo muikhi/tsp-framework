@@ -75,47 +75,103 @@ public class TSPSolver {
 	 */
 	public void solve() throws Exception
 	{
-		m_solution.print(System.err);
-		     	 	  		  		    		 	
-		Population p = new Population(m_instance, m_timeLimit, 10);	
-		
-		ArrayList<Solution> population = new ArrayList<Solution>();
-		population = Population.Miracle(m_instance, 10000);
-		m_solution = Population.Meilleur_Individu(population);
-		
-		// Example of a time loop
 		long startTime = System.currentTimeMillis();
 		long spentTime = 0;
-		
-		
-		/*//Initialiser la population
-		ArrayList<Solution> population = new ArrayList<Solution>();
-		population = Population.CreerPopulation(m_instance, (long)10, 5000);
-		
-		ArrayList<Solution> croisement = new ArrayList<Solution>();
-		ArrayList<Solution> selection = new ArrayList<Solution>();
-
-		for(int i =0; i<=1000; i++) {
-		
-			//Sélectionner les individus
-			selection = Population.SelectionnerPop(population);
-		
-			//Croiser la population 
-			croisement = Population.CroisementPop (selection);
-			
-			population = croisement;
-		}
-		
-		//On selectionne le meilleur individu de croisement
-		m_solution=Population.Meilleur_Individu(croisement);
-		
-		
-			// TODO
-			// Code a loop base on time here
-			//spentTime = System.currentTimeMillis() - startTime;
-			
-		//}while(spentTime < (m_timeLimit * 1000 - 100) ); //remplacer 0.5 par m_timeLimit pour avoir un programme qui tourne pendant 60s
+		m_solution.print(System.err);
+		     	 	  		  		    		 			
+		//local search
+		/**ArrayList<Solution> population = new ArrayList<Solution>();
+		population = Local_Search.Algo_Local_Search(m_instance, 20000);
+		m_solution = Genetique.Meilleur_Individu(population);
 		*/
+		
+		//Découpage en carré puis local search en respectant les carrés
+		/**ArrayList<Solution> population = new ArrayList<Solution>();
+		population = Carre_plus_LS.Algo_Local_Search(m_instance, 20000, 10000);
+		m_solution = Genetique.Meilleur_Individu(population);
+		*/
+		
+		ArrayList<Solution> population = new ArrayList<Solution>();
+		ArrayList<Solution> selection = new ArrayList<Solution>(); 
+		ArrayList<Solution> pop_croisee = new ArrayList<Solution>(); 
+		ArrayList<Solution> pop_rassemblee = new ArrayList<Solution>(); 
+		ArrayList<Solution> pop_complete = new ArrayList<Solution>(); 
+		ArrayList<Solution> pop_mute = new ArrayList<Solution>(); 
+		ArrayList<Solution> pop_sans_doublons = new ArrayList<Solution>(); 
+		
+		//genetique avec population créée par local search
+		population = Local_Search.Algo_Local_Search(m_instance, 500);
+
+		do
+		{
+			selection = Genetique.Selectionner_Meilleur_Pop(population);
+			pop_croisee = Genetique.CroisementPop(selection, m_instance);
+			pop_rassemblee= Genetique.Rassemblement_Pop(selection, pop_croisee);
+			pop_complete = Genetique.Completer_Pop(pop_rassemblee, population, m_instance);
+			pop_mute=Genetique.MutationPop(pop_complete, m_instance);
+			pop_sans_doublons=Genetique.Modifier_doublon(pop_mute, m_instance);
+			population = pop_sans_doublons;	
+			m_solution=Genetique.Meilleur_Individu(population);
+  	 		m_solution.setCityPosition(m_solution.getCity(0), m_instance.getNbCities()); // on doit avoir 1er ville = dernière ville
+
+			spentTime = System.currentTimeMillis() - startTime; 
+			
+		} while(spentTime < (m_timeLimit * 1000 - 100) ); 
+		
+		
+		//genetique avec population créée aléatoirement
+		population = Genetique.CreerPopulation(m_instance,100);
+
+		do
+		{
+			selection = Genetique.Selectionner_Meilleur_Pop(population);
+			pop_croisee = Genetique.CroisementPop(selection, m_instance);
+			pop_rassemblee= Genetique.Rassemblement_Pop(selection, pop_croisee);
+			pop_complete = Genetique.Completer_Pop(pop_rassemblee, population, m_instance);
+			pop_mute= Genetique.MutationPop(pop_complete, m_instance);
+			pop_sans_doublons= Genetique.Modifier_doublon(pop_mute, m_instance);
+			population = pop_sans_doublons;	
+			m_solution= Genetique.Meilleur_Individu(population);
+			m_solution.setCityPosition(m_solution.getCity(0), m_instance.getNbCities());
+			spentTime = System.currentTimeMillis() - startTime; 
+			
+		} while(spentTime < (m_timeLimit * 1000 - 100) ); 
+		
+		//Genetique avec les 4 carrés
+		population = Genetique_carres_4.CreerPopulation_Carre_4(m_instance, 500);
+		do
+		{
+			selection = Genetique_carres_4.Selectionner_Meilleur_Pop(population);
+			int point_de_croisement= Genetique_carres_4.get_point_de_croisement_4(m_instance);
+			pop_croisee = Genetique_carres_4.CroisementPop(selection, point_de_croisement);
+			pop_rassemblee= Genetique_carres_4.Rassemblement_Pop(selection, pop_croisee);
+			pop_complete = Genetique_carres_4.Completer_Pop_4(pop_rassemblee, population);
+			pop_mute=Genetique_carres_4.MutationPop_4(pop_complete);
+			pop_sans_doublons=Genetique_carres_4.Modifier_doublon_4(pop_mute);
+			population = pop_sans_doublons;	
+			m_solution=Genetique_carres_4.Meilleur_Individu(population);
+			m_solution.setCityPosition(m_solution.getCity(0), m_instance.getNbCities());
+			spentTime = System.currentTimeMillis() - startTime; 
+			
+		} while(spentTime < (m_timeLimit * 1000 - 100) ); 
+		
+		
+		//Genetique avec les 16 carrés
+		population = Genetique_carres_16.CreerPopulation_Carre_16(m_instance, 100, Genetique_carres_16.tableau_ville_16(m_instance));
+		do
+		{
+			selection = Genetique_carres_16.Selectionner_Meilleur_Pop(population);
+			pop_croisee = Genetique_carres_16.CroisementPop(selection, (int)m_instance.getNbCities()/2);
+			pop_rassemblee= Genetique_carres_16.Rassemblement_Pop(selection, pop_croisee);
+			pop_complete = Genetique_carres_16.Completer_Pop_16(pop_rassemblee, population);
+			pop_mute=Genetique_carres_16.MutationPop_16(pop_complete);
+			pop_sans_doublons=Genetique_carres_16.Modifier_doublon_16(pop_mute);
+			population = pop_sans_doublons;	
+			m_solution=Genetique_carres_16.Meilleur_Individu(population);
+			spentTime = System.currentTimeMillis() - startTime; 
+			
+		} while(spentTime < (m_timeLimit * 1000 - 100) ); 
+	
 		
 	}
 
