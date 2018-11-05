@@ -1,6 +1,10 @@
 package tsp;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 
@@ -175,9 +179,34 @@ public class TSPSolver {
 		
 	}
 
+	
 	// -----------------------------
 	// ----- GETTERS / SETTERS -----
 	// -----------------------------
+	
+		/** @return l'index de la valeur min du tableau */
+		public int getMin(Double[] distances_array) {
+			int ind = 0 ;
+			double min = 300000 ; // une grande constante du probleme pour la distance maximale
+			for (int i=1; i<distances_array.length; i++) {
+				if (distances_array[i]<min) {
+					min = distances_array[i];
+					ind = i ;
+				}
+			}
+			return ind ;
+		}
+		/** @param m_sol 
+		 * @return la position de la ville  
+		 * @throws Exception */
+		public int getPos(int indexCity, Solution m_sol) throws Exception {
+			int pos = 0 ;
+			while (m_sol.getCity(pos)!= indexCity && pos< m_instance.getNbCities() ) {
+				pos++;
+			}
+			return pos ;
+		}
+		
 
 	/** @return the problem Solution */
 	public Solution getSolution() {
