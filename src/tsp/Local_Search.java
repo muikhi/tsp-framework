@@ -21,6 +21,7 @@ public class Local_Search {
 	 * @param nbIndividu
 	 * @return une population composée d'individus de type Solution
 	 * @throws Exception
+	 * 
 	 */
 	
 	public static ArrayList<Solution> Algo_Local_Search(Instance instance, int nbIndividu) throws Exception {
